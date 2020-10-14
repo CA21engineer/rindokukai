@@ -253,3 +253,9 @@ Cat<NotHungry>().notEat()
 [Swiftで幽霊型を実装する - Qiita](https://qiita.com/shtnkgm/items/94938b39434cfa97e3f5)
 
 終わり
+
+## メモ
+
+- https://twitter.com/t_wada/status/904916106153828352?s=20
+- https://qiita.com/marty-suzuki/items/92182ee52332eb79f8a9
+- https://scior.hatenablog.com/entry/2019/04/04/202352

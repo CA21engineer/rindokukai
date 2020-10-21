@@ -248,3 +248,17 @@ class HogeViewController {
 - View は全てのユーザーからの入力を Presenter に丸投げ
 - View は簡単なプレゼンテーションロジックをもつ
 - Passive View のもつ冗長さの解決
+
+---
+
+## 2つの MVP の選定基準
+- すべてのプレゼンテーションロジックをテスト (筆者の基準)
+    - したい
+        - Passive View
+    - したくない
+        - Supervising Controller
+
+---
+
+## 実装例はサンプルコードへ 05, 06
+https://github.com/peaks-cc/iOS_architecture_samplecode

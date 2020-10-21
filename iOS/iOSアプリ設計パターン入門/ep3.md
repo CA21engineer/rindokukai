@@ -104,3 +104,147 @@ Java をやった時とかに話に出てくるポリモーフィズムと同じ
 ---
 
 # MVP
+
+---
+
+## MVP とは
+
+- 画面の描画処理とプレゼンテーションロジックを分離
+- 目的
+    - テスト容易性・作業分担のしやすさ
+        - 保守しやすい
+        - MVC の責務の再分割
+    - Presenter が View に対して手続き的に描画指示を出す「フロー同期」を導入
+
+---
+
+## データの同期方法
+
+- フロー同期
+- オブザーバー同期
+
+---
+
+## データの同期方法
+### フロー同期
+
+- 上位のレイヤーのオブジェクトから下位のレイヤーのオブジェクトに対して都度データを同期する方法 (手続き的な方法)
+
+### オブザーバー同期
+
+- 下位のレイヤーのオブジェクトから上位のレイヤーのオブジェクトをオブザーバパターンを使用して監視し、イベント通知を受け取ってデータを同期する方法 (宣言的な方法)
+
+---
+
+## データの同期方法
+### フロー同期
+#### メリット
+- データの流れを追いやすい
+
+#### デメリット
+- データを使用している全てのオブジェクトの参照を所持していなくてはいけないため、参照の管理が大変
+
+---
+
+## データの同期方法
+### オブザーバー同期
+#### メリット
+- データを複数の箇所で監視しやすい
+
+#### デメリット
+- データが変更されるたびに同期処理が走ってしまうため、データの流れがフロー同期に比べて追いにくい
+
+---
+
+## データ同期方法
+### iOS アプリ開発での具体的な例
+#### フロー同期
+
+```swift
+class HogePresenter {
+    let view: UIView
+
+    ...
+
+    func update() {
+        view.label.text = 'hogehoge'
+    }
+}
+```
+
+---
+
+## データ同期方法
+### iOS アプリ開発での具体的な例
+#### オブザーバー同期
+
+```swift
+class HogePresenter {
+    let titleSubject: PublishSubject<String>
+}
+class HogeViewController {
+    let presenter: HogePresenter
+    @override
+    func viewDidload() {
+        presenter.titleSubject.asObservable()
+            .bind(to: label.text)
+    }
+}
+```
+
+---
+
+## MVP の構造
+
+### 共通
+
+#### Model
+基本的に　MVC と同じ
+
+---
+## MVP の構造
+
+### 共通
+
+#### View 
+- ユーザー操作の受付・画面表示を担当
+- iOS での MVP では　ViewController も View に含む
+- Model の処理読んだり
+- Model の変更があれば表示を変更
+    - Model の変更の伝搬方法の違い
+        - `Passive View`
+        - `Supervising Controller`
+    
+---
+## MVP の構造
+
+### 共通
+
+#### Presenter 
+- プレゼンテーションロジックを担う
+- Model に画面表示に関わるロジックを持たせたくない時に使用
+- 1View 1Presenter
+    
+---
+
+## MVP の構造
+
+### Passive View (Passive -> 受動的)
+- View を完全に受け身にするパターン
+- View は全てのユーザーからの入力を Presenter に丸投げ
+- データのやりとりはフロー同期を用いる
+- プレゼンテーションロジックのテストがしやすくなる
+- Model へは Presenter からのみアクセス
+    
+---
+
+## MVP の構造
+### Supervising Controller
+
+- フロー同期・オブザーバー同期の両方を使うパターン
+- View: 
+    - Presenter とフロー同期
+    - Model と オブザーバー同期
+- View は全てのユーザーからの入力を Presenter に丸投げ
+- View は簡単なプレゼンテーションロジックをもつ
+- Passive View のもつ冗長さの解決

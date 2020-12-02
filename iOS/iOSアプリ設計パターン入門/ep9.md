@@ -106,3 +106,36 @@ style: |
   - 住み分けをしてあげる必要がある
 
 ---
+
+## State
+
+- struct のツリー構造で構成
+- 最上位の State を `AppState` として、直下に各画面の State を配置
+
+---
+
+## Action
+
+- enum または struct で表現
+
+---
+
+## ActionCreator
+
+- 副作用が許容
+- 出力は `Optional<Action>` のため、 Action を作らずとも良い
+
+---
+
+## Reducer
+
+- State のツリー構造の各ノードに対して１つずつ Reducer を配置する
+- Store は最上層の Reducer のみ参照
+  - 上層の Reducer が下層の Reducer を評価していることで構成
+
+---
+
+## Store
+
+- State と Reducer を保持し、Action をディスパッチする
+- 購読機能を有する

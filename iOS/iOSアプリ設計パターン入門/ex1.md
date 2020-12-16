@@ -68,37 +68,23 @@ style: |
 
 ---
 
-# 主な概要や誕生経緯
+# 主な概要
 
 ---
 
 ## 二人の有名な開発者によって作られた
 
 - Brandon Williams
-    - Kick Starter(iOS), Kick Starter(Android)など
-
 - Stephen Celis
-    - Kick Starter(iOS), Snapshot Testingなど
+
+どちらもKick Starterのmain contributerとして有名。snapshot testingとかも作ってる。
 
 ---
 
 ## 動画が多数存在するのでとりあえず見てない人は見た方がいいかも
 - https://www.pointfree.co/collections/composable-architecture/a-tour-of-the-composable-architecture/ep100-a-tour-of-the-composable-architecture-part-1
 
-TCA法海以外にも色々考え方を学べそうなコンテンツ(英語レベル高め)
-
----
-
-生まれた経緯を話す前にiOSの設計の歴史を振り返りましょう(時期は大まかに)
-
----
-
-
-
----
-
-生まれた経緯
-- SwiftUIが誕生したから！ではない
+TCAの理解以外にも色々考え方を学べそうなコンテンツ(英語レベル高め)
 
 ---
 
@@ -106,11 +92,11 @@ TCA法海以外にも色々考え方を学べそうなコンテンツ(英語レ�
 
 ---
 
-- State Management
-- Composition
-- Side Effect
-- Testable
-- Ergonomics
+- ## State Management
+- ## Composition
+- ## Side Effect
+- ## Testable
+- ## Ergonomics
 
 ---
 
@@ -121,28 +107,52 @@ TCA法海以外にも色々考え方を学べそうなコンテンツ(英語レ�
 
 ## Composition
 - コンポーネント思考
+    - FatなReducerが作成されない(Reducerの分割)
 
 ---
 
 ## Side Effect
-- TCAが広まる１番の要因
 - サービスにおける副作用に耐えうる設計になってる
-- CombineのPublisherに準拠してる
+    - 副作用(apiのfetch, 遅延処理とか)
+        - (PublisheのPublisherが内部で作成されてる)
+    - CombineのPublisherに準拠してるため実現できてる
 
 ---
 
 ## Testable
 - 書くべきテストコードの明確化
-- 
+    - Action -> Reducerをテストすることがメインになる
+- サンプルコードも豊富
 
 ---
 
-# Ergonomics
-- 簡略化
+## Ergonomics
+- 簡略化(?)
+    - 僕はまだこれを実感できてない
 
 ---
 
 # 登場するClassの役割
+
+---
+
+- **Action**
+    - enumで定義されたユーザーのアクション
+- **Reducer**
+    - Actionを受け取りEffectを呼び出すorStateに流す役割
+- **Effect**
+    - CombineのPublisher
+    - Actionへ接続する
+- **State**
+    - 受け取った値をViewに反映させる
+- **Store**
+    - Action, Reducer, Effect, Stateの集合体
+- **Environment**
+    - Dependencyを保持する
+
+---
+
+![bg :60% contain](https://cdn.hashnode.com/res/hashnode/image/upload/v1592176079987/2arp2Mvqc.jpeg)
 
 ---
 
@@ -151,17 +161,21 @@ TCA法海以外にも色々考え方を学べそうなコンテンツ(英語レ�
 ---
 
 # メリット
-- 状態管理の明確な階層分け
+- 状態管理の明確な責務の切り分け
     - 設計に関する議論がチームで行いやすくなる
 - modular architectureの適用のしやすさ
 - 採用につながる
+- Combine理解してなくてもなんとなくで書き始められる
+- テストを書くことの難易度が下がる
 
 ---
 
 # デメリット
+- 設計として制約が多い
 - ライブラリとしての依存をしないといけない(自作でも問題ない)
     - CombineをラップしてるのでCombineへの理解とiOS13以上ではないと使えない
         - UIKitのサンプルも存在する
+- 実務でやるのであればCombineの理解(ソースコードの理解)は必須
 - 別の設計への乗り換えはそこそこしんどそう
 - 長期プロジェクトになることが決まってないサービス
 - チームのレベル感次第では崩壊する
@@ -169,20 +183,37 @@ TCA法海以外にも色々考え方を学べそうなコンテンツ(英語レ�
 
 ---
 
-- AndroidにTCAは？
-    - あると面白いけど邪魔の可能性が高そう
-
----
-
 # サンプルコードを見る
 
 ---
 
-- counter demo
-    - Effectは関係ない、行ってしまえばもはやTCAではない
+- **Basic Usage**
+    - https://github.com/pointfreeco/swift-composable-architecture#basic-usage
+    - Effectがどんな感じか理解しやすい
+    - TestStoreも見てみると良さそう
 
-- effect basic
-    - counter demoに変な仕様を追加することでeffectの良さを知ることができる
+- **Todos**
+    - https://github.com/pointfreeco/swift-composable-architecture/tree/main/Examples/Todos
+    - 親コンポーネントと子コンポーネントの関係性が見れるので良さそう
+---
+
+- **WithViewStore**
+    - SwiftUIのView
+    - storeを初期値に持ち、viewStoreに変換する
+- **ViewStore**
+    - Observed Object
+    - ViewStoreを購読してViewを変更できる
+
+---
+
+# その他
+
+---
+
+## 結構他にも似たような設計を提唱しているものはある
+- Harvest
+- bow-arch
+- VueFlux
 
 ---
 
